@@ -5,6 +5,10 @@
     font-family: sans-serif;
 }
 
+body {
+    padding-bottom: 50px;
+}
+
 .scroll-bar::-webkit-scrollbar { 
     width: 4px;
 }
@@ -90,9 +94,7 @@
     cursor: pointer;
 }
 
-.header-2-btn:hover {
-    scale: 1.05;
-}
+
 
 .form {
     width: 50%;
@@ -159,8 +161,7 @@
 }
 
 #div1, #div2 {
-    opacity: 1;
-    transition: opacity 0.5s; /* Длительность и тип анимации */
+    transition: opacity 0.5s, transform 0.5s; /* Длительность и тип анимации */
 }
 
 .task-title-budget {

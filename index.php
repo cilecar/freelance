@@ -27,7 +27,7 @@
     </Header>
 
 
-    <div id="div1" style="display: none; opacity: 0;">
+    <div id="div1" style="display: none">
         <form class="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <label for="title">Название объявления:</label>
             <input class="text-field__input" type="text" name="title" id="title" required><br><br>
@@ -45,7 +45,7 @@
         </form>
     </div>
 
-    <div id="div2" style="display: block; opacity: 1;">
+    <div id="div2">
         <h1 class="tasks-main-headtext">Список объявлений</h1>
         <div class="tasks-main">
             <?php
@@ -87,6 +87,7 @@
                                         echo "<p class='task-industry'>" . $word . "</p>";
                                     }
                                 echo "</div>";
+                                echo "<button>" . "Открыть </button>";
                         echo "</div>";
                         
                     }
@@ -98,6 +99,7 @@
             ?>
         </div>
     </div>
+
 </div>
 </body>
 </html>
@@ -107,25 +109,17 @@
     var div1 = document.getElementById("div1");
     var div2 = document.getElementById("div2");
 
-    if (div1.style.opacity === "0") {
-        div1.style.opacity = "1";
-        div2.style.opacity = "0";
-    } else {
-        div1.style.opacity = "0";
-        div2.style.opacity = "1";
+    if (div1.style.display === "none") {
+        div1.style.display = "block";
+        div2.style.display = "none";
+        document.getElementById("button").textContent = "Вернуться назад";
     }
-
-    // Установите задержку перед изменением display
-    setTimeout(function() {
-        if (div1.style.opacity === "0") {
+    else {
             div1.style.display = "none";
             div2.style.display = "block";
-        } else {
-            div1.style.display = "block";
-            div2.style.display = "none";
+            document.getElementById("button").textContent = "Создать объявление";
         }
-    }, 550);
-});
+}); 
 </script>
 
 
