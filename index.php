@@ -7,7 +7,7 @@
 <body>
     <Header class="header">
         <div class="header-1">
-            <img class="logo" src="img\logo.png" alt="">
+            <a href="/"><img class="logo" src="img\logo.png" alt=""></a>
             <h3 class="header-1-text">
                 FreeLance
             </h3>
@@ -27,7 +27,7 @@
     </Header>
 
 
-    <div id="div1" style="display: none;">
+    <div id="div1" style="display: none; opacity: 0;">
         <form class="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <label for="title">Название объявления:</label>
             <input class="text-field__input" type="text" name="title" id="title" required><br><br>
@@ -45,7 +45,7 @@
         </form>
     </div>
 
-    <div id="div2" >
+    <div id="div2" style="display: block; opacity: 1;">
         <h1 class="tasks-main-headtext">Список объявлений</h1>
         <div class="tasks-main">
             <?php
@@ -72,11 +72,13 @@
 
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='task-div'>";
-                            echo "<div class='col-1'>";
+                            echo "<div class='task-title-budget'>";
                                 echo "<p class='task-title'>" . $row['title'] . "</p>";
-                                echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
+                                echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
                             echo "</div>";
-                                echo "<p class='task-budget'>" . $row['budget'] . "</p>";
+
+                                echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
+                                
                                 echo "<div class='industry-main-div'>";
                                     $industry = $row['industry']; // получение значения из базы данных или другого источника данных
                                         $words = explode(" ", $industry); // разбиваем строку на массив слов
@@ -102,17 +104,28 @@
 
 <script>
     document.getElementById("button").addEventListener("click", function() {
-        var div1 = document.getElementById("div1");
-        var div2 = document.getElementById("div2");
+    var div1 = document.getElementById("div1");
+    var div2 = document.getElementById("div2");
 
-        if (div1.style.display === "none") {
-            div1.style.display = "block";
-            div2.style.display = "none";
-        } else {
+    if (div1.style.opacity === "0") {
+        div1.style.opacity = "1";
+        div2.style.opacity = "0";
+    } else {
+        div1.style.opacity = "0";
+        div2.style.opacity = "1";
+    }
+
+    // Установите задержку перед изменением display
+    setTimeout(function() {
+        if (div1.style.opacity === "0") {
             div1.style.display = "none";
             div2.style.display = "block";
+        } else {
+            div1.style.display = "block";
+            div2.style.display = "none";
         }
-    });
+    }, 550);
+});
 </script>
 
 

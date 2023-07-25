@@ -76,6 +76,7 @@
 .header-2 {
     align-items: center;
     display: flex;
+
 }
 
 .header-2-btn {
@@ -96,11 +97,12 @@
 .form {
     width: 50%;
     margin: auto;
+    background-color: rgb(226 232 240);
+    border-radius: 10px;
+    padding: 20px;
 }
 
 .tasks-main {
-    display: grid;
-    gap: 6px;
     width: 60%;
     margin: auto;
     background-color: rgb(226 232 240);
@@ -115,12 +117,9 @@
 }
 
 .task-div {
-    display: grid;
-    grid-template-columns: 85% 15%;
-    padding: 12px;
-    gap: 10px;
-    margin: 0 6px 0 6px;
+    padding-bottom: 10px;
     border-bottom: 2px solid #969696;
+    margin-bottom: 5px;
 }
 
 .task-title {
@@ -146,19 +145,27 @@
 .industry-main-div {
     display: flex;
     gap: 10px;
+    margin-top: 10px;
 }
 
 .task-budget {
     font-size: 20px;
     text-align: center;
-}
-
-.col-2 {
-    align-self: center;
-    gap: 15px;
-    display: grid;
+    font-weight: bold;
 }
 
 #div1 {
     margin-top: 60px;
+}
+
+#div1, #div2 {
+    opacity: 1;
+    transition: opacity 0.5s; /* Длительность и тип анимации */
+}
+
+.task-title-budget {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 10px;
+    margin-bottom: 10px;
 }
