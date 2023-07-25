@@ -5,7 +5,14 @@
     font-family: sans-serif;
 }
 
+.scroll-bar::-webkit-scrollbar { 
+    width: 4px;
+}
 
+.scroll-bar::-webkit-scrollbar-thumb {
+    background-color: #969696;
+    border-radius: 10px;
+}
 
 .text-field__label {
     display: block;
@@ -48,6 +55,7 @@
     padding: 8px;
     display: flex;
     justify-content: space-between;
+    box-shadow: 0 0 20px rgb(226 232 240);
 }
 
 .header-1 {
@@ -93,18 +101,64 @@
 .tasks-main {
     display: grid;
     gap: 6px;
+    width: 60%;
+    margin: auto;
+    background-color: rgb(226 232 240);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 0 20px rgb(226 232 240);
+}
+
+.tasks-main-headtext {
+    margin: 25px auto 25px auto;
+    width: max-content;
 }
 
 .task-div {
     display: grid;
-    grid-template-columns: 80% 20%;
-    background-color: rgb(226 232 240);
-    border-radius: 10px;
-    padding: 10px;
+    grid-template-columns: 85% 15%;
+    padding: 12px;
     gap: 10px;
     margin: 0 6px 0 6px;
+    border-bottom: 2px solid #969696;
 }
 
-.task-div p {
-   width: max-content;
+.task-title {
+    font-size: 24px;
+}
+
+.task-description {
+    font-size: 18px;
+    line-height: 1.6;
+    max-height: 115px;
+    overflow-y: auto;
+}
+
+.task-industry {
+    font-size: 20px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: max-content;
+    display: block;
+}
+
+.industry-main-div {
+    display: flex;
+    gap: 10px;
+}
+
+.task-budget {
+    font-size: 20px;
+    text-align: center;
+}
+
+.col-2 {
+    align-self: center;
+    gap: 15px;
+    display: grid;
+}
+
+#div1 {
+    margin-top: 60px;
 }
