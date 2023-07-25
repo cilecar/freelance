@@ -22,13 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             VALUES ('$title', '$description', '$industry', '$budget')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Заказ успешно добавлен.";
+        echo "Объявление успешно добавлено.";
     } else {
         echo "Ошибка: " . $sql . "<br>" . $conn->error;
     }
 
     $conn->close();
 } else {
-    echo "Ошибка: форма не была отправлена.";
+    echo "Ошибка: Объявление не было добавлено.";
 }
 ?>
