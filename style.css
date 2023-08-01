@@ -80,10 +80,10 @@ body {
 .header-2 {
     align-items: center;
     display: flex;
-
+    gap: 20px;
 }
 
-.header-2-btn {
+.header-2-btn, .joinRegister, .register {
     background-color: rgb(24 24 27);
     color: rgb(241 245 249);
     font-size: 20px;
@@ -96,6 +96,29 @@ body {
 
 .header-2-btn:hover {
     scale: 1.05;
+}
+
+.joinRegister:hover {
+    scale: 1.05;
+}
+
+.joinRegister, .register{
+    padding: 10px;
+    width: 50%;
+    margin-top: 20px;
+}
+
+#btnRegister, #btnLogin {
+    background-color: transparent;
+    color: rgb(24 24 27);
+    border: 0;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.div-joinRegister, .div-btnRegister, .div-register, .div-btnLogin {
+    display: flex;
+    justify-content: center;
 }
 
 .form {
@@ -128,7 +151,7 @@ body {
 
 .task-title {
     font-size: 24px;
-    max-width: 650px;
+    max-width: 75%;
 }
 
 .task-description {
@@ -147,6 +170,7 @@ body {
     display: block;
     align-self: center;
     height: max-content;
+    background-color: rgb(241 245 249) ;
 }
 
 .industry-main-div {
@@ -161,7 +185,7 @@ body {
     font-weight: bold;
 }
 
-#div1 {
+#div1, #div3, #div4 {
     margin-top: 60px;
 }
 
@@ -184,7 +208,6 @@ body {
     font-size: 20px;
     padding: 8px;
     border-radius: 8px;
-    transition: 0.5s;
     cursor: pointer;
     transition: 0.5s ease;
     margin-left: auto;

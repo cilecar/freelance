@@ -5,6 +5,7 @@
     <title>FreeLance</title>
 </head>
 <body>
+    <!-- Шапка -->
     <Header class="header">
         <div class="header-1">
             <a href="/"><img class="logo" src="img\logo.png" alt=""></a>
@@ -23,13 +24,13 @@
             <button id="button" class="header-2-btn"> 
                 Создать объявление
             </button>
-            <button class="header-2-btn"> 
+            <button id="LoginHeader" class="header-2-btn"> 
                 Войти
             </button>
         </div>
     </Header>
 
-
+    <!-- Форма для нового объявления -->
     <div id="div1" style="display: none">
         <form class="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <label for="title">Название объявления:</label>
@@ -47,7 +48,7 @@
             <input style="width: 100%" class="header-2-btn" type="submit" value="Отправить">
         </form>
     </div>
-
+    <!-- Список объявлений -->
     <div id="div2">
         <h1 class="tasks-main-headtext">Список объявлений</h1>
         <div class="tasks-main">
@@ -103,56 +104,111 @@
         </div>
     </div>
 
-    <!-- Регистрация -->
-<div id="div3">
-<form action="register.php" method="POST">
-  <label for="reg-login">Логин:</label>
-  <input type="text" name="login" id="reg-login" required>
-  
-  <label for="reg-password">Пароль:</label>
-  <input type="password" name="password" id="reg-password" required>
-  
-  <input type="submit" value="Зарегистрироваться">
+        <!-- Регистрация -->
+        <div id="div3" style="display: none">
+            <form class="form" action="register.php" method="POST">
+            <label for="reg-login">Логин:</label>
+            <input class="text-field__input" type="text" name="login" id="reg-login" required>
+            <br>
+            <br>
+            <label for="reg-password">Пароль:</label>
+            <input class="text-field__input" type="password" name="password" id="reg-password" required>
+            
+            <div class="div-register">
+                <input class="register" type="submit" value="Зарегистрироваться">
+            </div>
 
-  <button>Еще нет аккаунта? Зарегистрироваться</button>
-</form>
-</div>
+            <div class="div-btnLogin">
+                <button id="btnLogin">Уже есть аккаунт? Войти</button>
+            </div>
+            
+            </form>
+        </div>
 
-<!-- Авторизация -->
-<div id="div4">
-<form action="login.php" method="POST">
-  <label for="login-login">Логин:</label>
-  <input type="text" name="login" id="login-login" required>
-  
-  <label for="login-password">Пароль:</label>
-  <input type="password" name="password" id="login-password" required>
-  
-  <input type="submit" value="Войти">
+        <!-- Авторизация -->
+        <div class="authorization" id="div4" style="display: none">
+            <form class="form" action="login.php" method="POST">
+            <label for="login-login">Логин:</label>
+            <input class="text-field__input" type="text" name="login" id="login-login" required>
+            <br>
+            <br>
+            <label for="login-password">Пароль:</label>
+            <input class="text-field__input" type="password" name="password" id="login-password" required>
+            
+            <div class="div-joinRegister">
+                <input class="joinRegister" type="submit" value="Войти">
+            </div>
 
-  <button>Уже есть аккаунт? Войти</button>
-</form>
-</div>
-
-</div>
-</body>
+            <div class="div-btnRegister">
+                <button id="btnRegister">Еще нет аккаунта? Зарегистрироваться</button>
+            </div>
+            </form>
+        </div>
+    </body>
 </html>
 
 <script>
     document.getElementById("button").addEventListener("click", function() {
     var div1 = document.getElementById("div1");
     var div2 = document.getElementById("div2");
+    var div3 = document.getElementById("div3");
+    var div4 = document.getElementById("div4");
 
     if (div1.style.display === "none") {
         div1.style.display = "block";
         div2.style.display = "none";
-        document.getElementById("button").textContent = "Вернуться назад";
+        div3.style.display = "none";
+        div4.style.display = "none";
     }
     else {
             div1.style.display = "none";
             div2.style.display = "block";
-            document.getElementById("button").textContent = "Создать объявление";
+            div3.style.display = "none";
+            div4.style.display = "none";
         }
-}); 
+    }); 
+
+    document.getElementById("LoginHeader").addEventListener("click", function() {
+    var div1 = document.getElementById("div1");
+    var div2 = document.getElementById("div2");
+    var div3 = document.getElementById("div3");
+    var div4 = document.getElementById("div4");
+
+    if (div4.style.display === "none") {
+        div1.style.display = "none";
+        div2.style.display = "none";
+        div3.style.display = "none";
+        div4.style.display = "block";
+    }
+    }); 
+
+    document.getElementById("btnRegister").addEventListener("click", function() {
+    var div1 = document.getElementById("div1");
+    var div2 = document.getElementById("div2");
+    var div3 = document.getElementById("div3");
+    var div4 = document.getElementById("div4");
+
+    if (div4.style.display === "block") {
+        div3.style.display = "block";
+        div4.style.display = "none";
+        div2.style.display = "none";
+        div1.style.display = "none";
+    }
+    }); 
+
+    document.getElementById("btnLogin").addEventListener("click", function() {
+    var div1 = document.getElementById("div1");
+    var div2 = document.getElementById("div2");
+    var div3 = document.getElementById("div3");
+    var div4 = document.getElementById("div4");
+
+    if (div3.style.display === "block") {
+        div3.style.display = "none";
+        div2.style.display = "none";
+        div1.style.display = "none";
+        div4.style.display = "block";
+    }
+    }); 
 </script>
 
 
