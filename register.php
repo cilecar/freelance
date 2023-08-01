@@ -10,23 +10,24 @@ if (mysqli_connect_errno()) {
 // Получение данных из формы
 $login = $_POST['login'];
 $password = $_POST['password'];
+$userRole = $_POST['user_role'];
 
 // Проверка, не существует ли уже пользователь с таким же логином
 $query = "SELECT * FROM users WHERE login = '$login'";
 $result = mysqli_query($db, $query);
 if (mysqli_num_rows($result) > 0) {
-    die('Пользователь с таким логином уже существует');
+    echo '<script>alert("Пользователь с таким логином уже существует"); window.location.href = "index.php";</script>';
+    exit;
 }
 
 // Хэширование пароля
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 // Добавление нового пользователя в базу данных
-$query = "INSERT INTO users (login, password) VALUES ('$login', '$hashedPassword')";
+$query = "INSERT INTO users (login, password, role) VALUES ('$login', '$hashedPassword', '$userRole')";
 mysqli_query($db, $query);
 
 // Закрытие соединения с базой данных
 mysqli_close($db);
 
-echo 'Регистрация прошла успешно';
-?>
+echo '<script>alert("Регистрация прошла успешно"); window.location.href = "index.php";</script>';

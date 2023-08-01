@@ -107,12 +107,39 @@
         <!-- Регистрация -->
         <div id="div3" style="display: none">
             <form class="form" action="register.php" method="POST">
+
             <label for="reg-login">Логин:</label>
             <input class="text-field__input" type="text" name="login" id="reg-login" required>
+
             <br>
             <br>
+
             <label for="reg-password">Пароль:</label>
             <input class="text-field__input" type="password" name="password" id="reg-password" required>
+
+            <br>
+            <br>
+
+            <h1 class="text-choiseType">Выберите роль</h1>
+            <div class="div-choiseType">
+                <article class="feature1">
+                    <input type="checkbox" id="feature1" name="user_role" value="Исполнитель">
+                    <div>
+                        <span>
+                            Исполнитель
+                        </span>
+                    </div>
+                </article>
+                <article class="feature2">
+                    <input type="checkbox" id="feature2" name="user_role" value="Заказчик">
+                    <div>
+                        <span>
+                            Заказчик
+                        </span>
+                    </div>
+                </article>
+            </div>
+            
             
             <div class="div-register">
                 <input class="register" type="submit" value="Зарегистрироваться">
@@ -128,10 +155,13 @@
         <!-- Авторизация -->
         <div class="authorization" id="div4" style="display: none">
             <form class="form" action="login.php" method="POST">
+
             <label for="login-login">Логин:</label>
             <input class="text-field__input" type="text" name="login" id="login-login" required>
+
             <br>
             <br>
+
             <label for="login-password">Пароль:</label>
             <input class="text-field__input" type="password" name="password" id="login-password" required>
             
@@ -142,6 +172,7 @@
             <div class="div-btnRegister">
                 <button id="btnRegister">Еще нет аккаунта? Зарегистрироваться</button>
             </div>
+
             </form>
         </div>
     </body>

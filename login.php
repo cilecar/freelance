@@ -18,9 +18,9 @@ $user = mysqli_fetch_assoc($result);
 
 // Проверка правильности введенного пароля
 if (password_verify($password, $user['password'])) {
-    echo 'Авторизация успешна';
+    echo '<script>alert("Авторизация успешна"); window.location.href = "index.php";</script>';
 } else {
-    echo 'Неправильный логин или пароль';
+    echo '<script>alert("Неправильный логин или пароль"); window.location.href = "index.php";</script>';
 }
 
 // Закрытие соединения с базой данных
