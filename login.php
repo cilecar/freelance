@@ -16,8 +16,8 @@ $query = "SELECT * FROM users WHERE login = '$login'";
 $result = mysqli_query($db, $query);
 $user = mysqli_fetch_assoc($result);
 
-// Проверка правильности введенного пароля
 if (password_verify($password, $user['password'])) {
+    setcookie('user_id', $user['id'], time() + 3600); // 1 час
     echo '<script>alert("Авторизация успешна"); window.location.href = "index.php";</script>';
 } else {
     echo '<script>alert("Неправильный логин или пароль"); window.location.href = "index.php";</script>';

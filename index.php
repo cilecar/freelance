@@ -1,3 +1,12 @@
+<?php
+if (isset($_COOKIE['user_id'])) {
+    $user_id = $_COOKIE['user_id'];
+    echo "Куки значение: " . $user_id;
+} else {
+    echo "Куки user_id не существует";
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
