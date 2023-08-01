@@ -23,6 +23,9 @@
             <button id="button" class="header-2-btn"> 
                 Создать объявление
             </button>
+            <button class="header-2-btn"> 
+                Войти
+            </button>
         </div>
     </Header>
 
@@ -99,6 +102,36 @@
             ?>
         </div>
     </div>
+
+    <!-- Регистрация -->
+<div id="div3">
+<form action="register.php" method="POST">
+  <label for="reg-login">Логин:</label>
+  <input type="text" name="login" id="reg-login" required>
+  
+  <label for="reg-password">Пароль:</label>
+  <input type="password" name="password" id="reg-password" required>
+  
+  <input type="submit" value="Зарегистрироваться">
+
+  <button>Еще нет аккаунта? Зарегистрироваться</button>
+</form>
+</div>
+
+<!-- Авторизация -->
+<div id="div4">
+<form action="login.php" method="POST">
+  <label for="login-login">Логин:</label>
+  <input type="text" name="login" id="login-login" required>
+  
+  <label for="login-password">Пароль:</label>
+  <input type="password" name="password" id="login-password" required>
+  
+  <input type="submit" value="Войти">
+
+  <button>Уже есть аккаунт? Войти</button>
+</form>
+</div>
 
 </div>
 </body>

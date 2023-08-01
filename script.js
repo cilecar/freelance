@@ -12,8 +12,3 @@ btnExecutor.addEventListener('click', () => {
     customerDiv.style.display = 'none';
     executorDiv.style.display = 'block';
 });
-
-
-
-
-
