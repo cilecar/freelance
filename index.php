@@ -86,8 +86,8 @@
                                         foreach ($words as $word) {
                                         echo "<p class='task-industry'>" . $word . "</p>";
                                     }
+                                    echo "<button class='btn-order'>Откликнуться</button>";
                                 echo "</div>";
-                                echo "<button>" . "Открыть </button>";
                         echo "</div>";
                         
                     }

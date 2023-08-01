@@ -94,7 +94,9 @@ body {
     cursor: pointer;
 }
 
-
+.header-2-btn:hover {
+    scale: 1.05;
+}
 
 .form {
     width: 50%;
@@ -121,11 +123,12 @@ body {
 .task-div {
     padding-bottom: 10px;
     border-bottom: 2px solid #969696;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .task-title {
     font-size: 24px;
+    max-width: 650px;
 }
 
 .task-description {
@@ -142,6 +145,8 @@ body {
     border-radius: 10px;
     width: max-content;
     display: block;
+    align-self: center;
+    height: max-content;
 }
 
 .industry-main-div {
@@ -169,4 +174,25 @@ body {
     justify-content: space-between;
     padding-right: 10px;
     margin-bottom: 10px;
+}
+
+
+.btn-order {
+    background-color: rgb(241 245 249) ;
+    border: 1px solid black;
+    color: rgb(24 24 27);
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: 0.5s;
+    cursor: pointer;
+    transition: 0.5s ease;
+    margin-left: auto;
+}
+
+.btn-order:hover {
+    scale: 1.05;
+    background-color: rgb(24 24 27);
+    color: rgb(241 245 249);
+    border-color: white;
 }
