@@ -17,7 +17,22 @@ $result = mysqli_query($db, $query);
 $user = mysqli_fetch_assoc($result);
 
 if (password_verify($password, $user['password'])) {
+    // Нахождение имени пользователя по его идентификатору
+    $user_id = $user['id'];
+    $username_query = "SELECT username FROM users WHERE id = '$user_id'";
+    $username_result = mysqli_query($db, $username_query);
+    $username = mysqli_fetch_assoc($username_result)['username'];
+    
+    // Нахождение роли пользователя по его идентификатору
+    $user_role_query = "SELECT user_role FROM users WHERE id = '$user_id'";
+    $user_role_result = mysqli_query($db, $user_role_query);
+    $user_role = mysqli_fetch_assoc($user_role_result)['user_role'];
+
+    // Запись идентификатора, имени пользователя и роли в куки
     setcookie('user_id', $user['id'], time() + 3600); // 1 час
+    setcookie('username', $username, time() + 3600); // 1 час
+    setcookie('user_role', $user_role, time() + 3600); // 1 час
+
     echo '<script>alert("Авторизация успешна"); window.location.href = "index.php";</script>';
 } else {
     echo '<script>alert("Неправильный логин или пароль"); window.location.href = "index.php";</script>';

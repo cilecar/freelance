@@ -1,12 +1,3 @@
-<?php
-if (isset($_COOKIE['user_id'])) {
-    $user_id = $_COOKIE['user_id'];
-    echo "Куки значение: " . $user_id;
-} else {
-    echo "Куки user_id не существует";
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,21 +20,58 @@ if (isset($_COOKIE['user_id'])) {
             </a>
         </div>
 
-        <div class="header-2">
-            <button id="button" class="header-2-btn"> 
-                Создать объявление
-            </button>
-            <button id="LoginHeader" class="header-2-btn"> 
-                Войти
-            </button>
-        </div>
+        <div class="header-2">            
+        <?php
+            // Получение значения имени пользователя из куки, если оно установлено
+            $username = isset($_COOKIE['username']) ? $_COOKIE['username'] : '';
+
+            // Получение значения роли пользователя из куки, если оно установлено
+            $user_role = isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : '';
+
+            // Проверка, авторизован ли пользователь
+            if (!empty($username)) {
+                // Вывод кнопки "Создать объявление" для авторизованного пользователя
+                echo '<button id="createAdButton" class="header-2-btn">
+                        Создать объявление
+                    </button>';
+            } else {
+                // Вывод кнопки "Войти" для неавторизованного пользователя
+                echo '<button id="loginButton" class="header-2-btn">
+                        Войти
+                    </button>';
+            }
+
+            // Вывод имени пользователя и роли, если он авторизован
+            if (!empty($username)) {
+                echo '<div class="div-user">';
+
+                echo '<img src="/img/user-alt-1-svgrepo-com.png" class="user-logo">';
+                    echo '<p>' . $username;
+                    echo '<p>' . $user_role;
+                echo '</div>';
+
+                echo '<form method="post">';
+                echo '<button type="submit" name="clear_cookies" class="btn-exit" title="Выйти из аккаунта"></button>';
+                echo '</form>';
+            }
+        ?>
+</div>
+
+<?php
+    if (isset($_POST["clear_cookies"])) {
+        $past = time() - 3600; // задаем прошедшее время (1 час назад)
+        foreach ($_COOKIE as $cookie_name => $cookie_value) {
+            setcookie($cookie_name, $cookie_value, $past);
+        }
+    }
+?>
     </Header>
 
     <!-- Форма для нового объявления -->
     <div id="div1" style="display: none">
         <form class="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <label for="title">Название объявления:</label>
-            <input class="text-field__input" type="text" name="title" id="title" required><br><br>
+            <input class="text-field__input" type="text" name="title" id="title" minlength="5" required><br><br>
 
             <label for="description">Описание объявления:</label>
             <textarea style="height: 200px; resize: none" class="text-field__input scroll-bar" name="description" id="description" required></textarea><br><br>
@@ -84,25 +112,25 @@ if (isset($_COOKIE['user_id'])) {
                     $result = $conn->query($sql);
 
                     while ($row = $result->fetch_assoc()) {
-                        echo "<div class='task-div'>";
+                        echo "<div class='task-div' data-task-id='" . $row['id'] . "'>";
                             echo "<div class='task-title-budget'>";
                                 echo "<p class='task-title'>" . $row['title'] . "</p>";
                                 echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
                             echo "</div>";
 
-                                echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
-                                
-                                echo "<div class='industry-main-div'>";
-                                    $industry = $row['industry']; // получение значения из базы данных или другого источника данных
-                                        $words = explode(" ", $industry); // разбиваем строку на массив слов
+                            echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
 
-                                        foreach ($words as $word) {
+                            echo "<div class='industry-main-div'>";
+                                $industry = $row['industry']; // получение значения из базы данных или другого источника данных
+                                $words = explode(" ", $industry); // разбиваем строку на массив слов
+                                echo '<div class="task-div-main scroll-bar">';
+                                    foreach ($words as $word) {
                                         echo "<p class='task-industry'>" . $word . "</p>";
                                     }
-                                    echo "<button class='btn-order'>Откликнуться</button>";
-                                echo "</div>";
+                                echo '</div>';
+                                echo "<button class='btn-order'>Откликнуться</button>";
+                            echo "</div>";
                         echo "</div>";
-                        
                     }
                 } else {
                     echo "<p>Нет доступных заказов.</p>";
@@ -117,47 +145,53 @@ if (isset($_COOKIE['user_id'])) {
         <div id="div3" style="display: none">
             <form class="form" action="register.php" method="POST">
 
-            <label for="reg-login">Логин:</label>
-            <input class="text-field__input" type="text" name="login" id="reg-login" required>
+                <label for="reg-username">Имя пользователя:</label>
+                <input class="text-field__input" type="text" name="username" id="reg-username" minlength="5" required>
 
-            <br>
-            <br>
+                <br>
+                <br>
 
-            <label for="reg-password">Пароль:</label>
-            <input class="text-field__input" type="password" name="password" id="reg-password" required>
+                <label for="reg-login">Логин:</label>
+                <input class="text-field__input" type="text" name="login" id="reg-login" minlength="5" required>
 
-            <br>
-            <br>
+                <br>
+                <br>
 
-            <h1 class="text-choiseType">Выберите роль</h1>
-            <div class="div-choiseType">
-                <article class="feature1">
-                    <input type="checkbox" id="feature1" name="user_role" value="Исполнитель">
-                    <div>
-                        <span>
-                            Исполнитель
-                        </span>
-                    </div>
-                </article>
-                <article class="feature2">
-                    <input type="checkbox" id="feature2" name="user_role" value="Заказчик">
-                    <div>
-                        <span>
-                            Заказчик
-                        </span>
-                    </div>
-                </article>
-            </div>
-            
-            
-            <div class="div-register">
-                <input class="register" type="submit" value="Зарегистрироваться">
-            </div>
+                <label for="reg-password">Пароль:</label>
+                <input class="text-field__input" type="password" name="password" id="reg-password" minlength="7" required>
 
-            <div class="div-btnLogin">
-                <button id="btnLogin">Уже есть аккаунт? Войти</button>
-            </div>
-            
+                <br>
+                <br>
+
+                <h1 class="text-choiseType">Выберите роль</h1>
+                <div class="div-choiseType">
+                    <article class="feature1">
+                        <input type="radio" id="feature1" name="user_role" value="Исполнитель">
+                        <div>
+                            <span>
+                                Исполнитель
+                            </span>
+                        </div>
+                    </article>
+                    <article class="feature2">
+                        <input type="radio" id="feature2" name="user_role" value="Заказчик">
+                        <div>
+                            <span>
+                                Заказчик
+                            </span>
+                        </div>
+                    </article>
+                </div>
+
+
+                <div class="div-register">
+                    <input class="register" type="submit" value="Зарегистрироваться">
+                </div>
+
+                <div class="div-btnLogin">
+                    <button id="btnLogin">Уже есть аккаунт? Войти</button>
+                </div>
+
             </form>
         </div>
 
@@ -166,13 +200,13 @@ if (isset($_COOKIE['user_id'])) {
             <form class="form" action="login.php" method="POST">
 
             <label for="login-login">Логин:</label>
-            <input class="text-field__input" type="text" name="login" id="login-login" required>
+            <input class="text-field__input" type="text" name="login" id="login-login" minlength="5" required>
 
             <br>
             <br>
 
             <label for="login-password">Пароль:</label>
-            <input class="text-field__input" type="password" name="password" id="login-password" required>
+            <input class="text-field__input" type="password" name="password" id="login-password" minlength="7" required>
             
             <div class="div-joinRegister">
                 <input class="joinRegister" type="submit" value="Войти">
@@ -186,41 +220,39 @@ if (isset($_COOKIE['user_id'])) {
         </div>
     </body>
 </html>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    document.getElementById("button").addEventListener("click", function() {
+    document.addEventListener("DOMContentLoaded", function() {
+    var createAdButton = document.getElementById("createAdButton");
+    var loginButton = document.getElementById("loginButton");
+
     var div1 = document.getElementById("div1");
     var div2 = document.getElementById("div2");
     var div3 = document.getElementById("div3");
     var div4 = document.getElementById("div4");
 
-    if (div1.style.display === "none") {
-        div1.style.display = "block";
-        div2.style.display = "none";
-        div3.style.display = "none";
-        div4.style.display = "none";
-    }
-    else {
-            div1.style.display = "none";
-            div2.style.display = "block";
+    var username = "<?php echo $username ?>";
+
+    // Проверяем, существует ли кнопка "createAdButton" на странице
+    if (createAdButton) {
+        createAdButton.addEventListener("click", function() {
+            div1.style.display = "block";
+            div2.style.display = "none";
             div3.style.display = "none";
             div4.style.display = "none";
-        }
-    }); 
-
-    document.getElementById("LoginHeader").addEventListener("click", function() {
-    var div1 = document.getElementById("div1");
-    var div2 = document.getElementById("div2");
-    var div3 = document.getElementById("div3");
-    var div4 = document.getElementById("div4");
-
-    if (div4.style.display === "none") {
-        div1.style.display = "none";
-        div2.style.display = "none";
-        div3.style.display = "none";
-        div4.style.display = "block";
+        });
     }
-    }); 
+
+    // Проверяем, существует ли кнопка "loginButton" на странице
+    if (loginButton) {
+        loginButton.addEventListener("click", function() {
+            div1.style.display = "none";
+            div2.style.display = "none";
+            div3.style.display = "none";
+            div4.style.display = "block";
+        });
+    }
+});
 
     document.getElementById("btnRegister").addEventListener("click", function() {
     var div1 = document.getElementById("div1");
@@ -249,6 +281,30 @@ if (isset($_COOKIE['user_id'])) {
         div4.style.display = "block";
     }
     }); 
+
+    $('.btn-order').click(function() {
+    var userId = <?php echo isset($_COOKIE['user_id']) ? $_COOKIE['user_id'] : 'null'; ?>;
+    var taskId = $(this).closest('.task-div').data('task-id');
+    var status = 'Выполняется';
+
+    if (userId === null) {
+        alert('Пожалуйста, авторизуйтесь для выполнения запроса');
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: 'requestProcessing.php',
+        data: {userId: userId, taskId: taskId, status: status},
+        success: function(response) {
+            // Обновление таблицы или других элементов на странице
+            // в соответствии с новыми данными
+        },
+        error: function() {
+            alert('Ошибка при выполнении запроса');
+        }
+    });
+});
 </script>
 
 
