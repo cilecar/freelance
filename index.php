@@ -6,56 +6,81 @@
 </head>
 <body>
     <!-- Шапка -->
-    <Header class="header">
-        <div class="header-1">
-            <a href="/"><img class="logo" src="img\logo.png" alt=""></a>
-            <h3 class="header-1-text">
-                FreeLance
-            </h3>
-            <a target="_blank" href="https://telegram.org/">
-                <img class="w-10" src="../img/telegram-alt-svgrepo-com.png" alt="">
-            </a>
-            <a href="https://vk.com">
-                <img class="w-10" src="../img/vk-fill-svgrepo-com.png" alt="">
-            </a>
-        </div>
+<Header class="header">
+  <div class="header-1">
+    <a href="/"><img class="logo" src="img\logo.png" alt=""></a>
+    <h3 class="header-1-text">
+      FreeLance
+    </h3>
+    <a target="_blank" href="https://telegram.org/">
+      <img class="w-10" src="../img/telegram-alt-svgrepo-com.png" alt="">
+    </a>
+    <a href="https://vk.com">
+      <img class="w-10" src="../img/vk-fill-svgrepo-com.png" alt="">
+    </a>
+  </div>
 
-        <div class="header-2">            
-        <?php
-            // Получение значения имени пользователя из куки, если оно установлено
-            $username = isset($_COOKIE['username']) ? $_COOKIE['username'] : '';
+  <div class="header-2">
+    <?php
+      // Получение значения имени пользователя из куки, если оно установлено
+      $username = isset($_COOKIE['username']) ? $_COOKIE['username'] : '';
 
-            // Получение значения роли пользователя из куки, если оно установлено
-            $user_role = isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : '';
+      // Получение значения роли пользователя из куки, если оно установлено
+      $user_role = isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : '';
 
-            // Проверка, авторизован ли пользователь
-            if (!empty($username)) {
-                // Вывод кнопки "Создать объявление" для авторизованного пользователя
-                echo '<button id="createAdButton" class="header-2-btn">
-                        Создать объявление
-                    </button>';
-            } else {
-                // Вывод кнопки "Войти" для неавторизованного пользователя
-                echo '<button id="loginButton" class="header-2-btn">
-                        Войти
-                    </button>';
-            }
+      // Проверка, авторизован ли пользователь
+      if (!empty($username)) {
+        // Вывод кнопки "Переключить роль" и добавление обработчика события
+        echo '<button id="toggleRoleButton" class="header-3-btn">';
+        echo 'Сменить роль на: ';
+        echo $user_role == 'Заказчик' ? 'Исполнитель' : 'Заказчик';
+        echo '</button>';
 
-            // Вывод имени пользователя и роли, если он авторизован
-            if (!empty($username)) {
-                echo '<div class="div-user">';
+        echo '<script>
+                document.getElementById("toggleRoleButton").addEventListener("click", function() {
+                  var xhr = new XMLHttpRequest();
+                  xhr.open("POST", "toggle_role.php", true);
+                  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                  xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                      location.reload(); // Перезагрузка страницы после успешного обновления роли пользователя
+                    }
+                  }
+                  xhr.send();
+                });
+              </script>';
 
-                echo '<img src="/img/user-alt-1-svgrepo-com.png" class="user-logo" id="userProfile">';
-                    echo '<p>' . $username;
-                    echo '<p>' . $user_role;
-                echo '</div>';
+        // Проверка роли пользователя
+        if ($user_role == 'Исполнитель') {
 
-                echo '<form method="post">';
-                echo '<button type="submit" name="clear_cookies" class="btn-exit" value="Очистить куки" title="Выйти из аккаунта" onclick="reloadPage()"></button>';
-                echo '</form>';
-            }
-        ?>
-</div>
+        } elseif ($user_role == 'Заказчик') {
+          // Вывод кнопки "Создать объявление" для пользователя с ролью "Заказчик"
+          echo '<button id="createAdButton" class="header-2-btn">
+                      Создать объявление
+                  </button>';
+        }
+      } else {
+        // Вывод кнопки "Войти" для неавторизованного пользователя
+        echo '<button id="loginButton" class="header-2-btn">
+                Войти
+              </button>';
+      }
+
+      // Вывод имени пользователя и роли, если он авторизован
+      if (!empty($username)) {
+        echo '<div class="div-user">';
+
+        echo '<img src="/img/user-alt-1-svgrepo-com.png" class="user-logo" id="userProfile">';
+        echo '<p>' . $username;
+        echo '<p>' . $user_role;
+        echo '</div>';
+
+        echo '<form method="post">';
+        echo '<button type="submit" name="clear_cookies" class="btn-exit" value="Очистить куки" title="Выйти из аккаунта" onclick="reloadPage()"></button>';
+        echo '</form>';
+      }
+    ?>
+  </div>
 
 <?php
     if (isset($_POST["clear_cookies"])) {
@@ -80,6 +105,7 @@
             <textarea style="height: 200px; resize: none" class="text-field__input scroll-bar" name="description" id="description" required></textarea><br><br>
 
             <label for="industry">Навыки:</label>
+            <p>Введите от 1 до 10 ключевых навыков, разделяя их запятой</p>
             <input class="text-field__input" type="text" name="industry" id="industry" required><br><br>
 
             <label for="budget">Бюджет в рублях:</label>
@@ -89,7 +115,7 @@
         </form>
     </div>
     <!-- Список объявлений -->
-<div id="div2">
+    <div id="div2">
     <h1 class="tasks-main-headtext">Список объявлений</h1>
     <div class="tasks-main">
         <?php
@@ -134,7 +160,12 @@
                             echo '<div class="task-div-main scroll-bar">';
                                     echo "<p class='task-industry scroll-bar'>" . $row['industry'] . "</p>";
                             echo '</div>';
+                            if ($user_role == 'Заказчик') {
+                                echo "<button class='btn-order' disabled>Откликнуться</button>";
+                                echo "<p class='alert-message'>Смените вашу роль на Исполнителя для отклика на объявление</p>";
+                            } else {
                                 echo "<button class='btn-order'>Откликнуться</button>";
+                            }
                         echo "</div>";
                     echo "</div>";
                 }

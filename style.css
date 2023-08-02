@@ -62,6 +62,7 @@ body {
     display: flex;
     justify-content: space-between;
     box-shadow: 0 0 20px rgb(226 232 240);
+    height: 115px;
 }
 
 .header-1 {
@@ -349,4 +350,22 @@ select {
 .alert-orders {
     font-size: 20px;
     cursor: default;
+}
+
+.alert-message {
+    color: gray;
+}
+
+.header-3-btn {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    position: absolute;
+    left: 1250px;
+    top: 100px;
+}
+
+#div1 p {
+    font-size: 13px;
+    color: gray;
 }
