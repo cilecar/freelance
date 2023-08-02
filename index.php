@@ -45,7 +45,7 @@
             if (!empty($username)) {
                 echo '<div class="div-user">';
 
-                echo '<img src="/img/user-alt-1-svgrepo-com.png" class="user-logo">';
+                echo '<img src="/img/user-alt-1-svgrepo-com.png" class="user-logo" id="userProfile">';
                     echo '<p>' . $username;
                     echo '<p>' . $user_role;
                 echo '</div>';
@@ -86,60 +86,69 @@
         </form>
     </div>
     <!-- Список объявлений -->
-    <div id="div2">
-        <h1 class="tasks-main-headtext">Список объявлений</h1>
-        <div class="tasks-main">
-            <?php
-                // Подключение к базе данных MySQL
-                $servername = "127.0.0.1";
-                $username = "root";
-                $password = "";
-                $dbname = "freelance";
+<div id="div2">
+    <h1 class="tasks-main-headtext">Список объявлений</h1>
+    <div class="tasks-main">
+        <?php
+            // Подключение к базе данных MySQL
+            $servername = "127.0.0.1";
+            $username = "root";
+            $password = "";
+            $dbname = "freelance";
 
-                $conn = new mysqli($servername, $username, $password, $dbname);
-                if ($conn->connect_error) {
-                    die("Ошибка подключения к базе данных: " . $conn->connect_error);
-                }
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            if ($conn->connect_error) {
+                die("Ошибка подключения к базе данных: " . $conn->connect_error);
+            }
 
-                // Выборка данных из базы данных, только если таблица не пустая
-                $sql_check = "SELECT COUNT(*) as total FROM orders";
-                $result_check = $conn->query($sql_check);
-                $row_check = $result_check->fetch_assoc();
+            // Выборка данных из базы данных, только если таблица не пустая
+            $sql_check = "SELECT COUNT(*) as total FROM orders";
+            $result_check = $conn->query($sql_check);
+            $row_check = $result_check->fetch_assoc();
 
-                if ($row_check['total'] > 0) {
-                    // Выполнить запрос только если есть заказы
-                    $sql = "SELECT * FROM orders";
-                    $result = $conn->query($sql);
+            if ($row_check['total'] > 0) {
+                // Выполнить запрос только если есть заказы
+                $sql = "SELECT * FROM orders";
+                $result = $conn->query($sql);
+                $counter = 0;
 
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<div class='task-div' data-task-id='" . $row['id'] . "'>";
-                            echo "<div class='task-title-budget'>";
-                                echo "<p class='task-title'>" . $row['title'] . "</p>";
-                                echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
-                            echo "</div>";
-
-                            echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
-
-                            echo "<div class='industry-main-div'>";
-                                $industry = $row['industry']; // получение значения из базы данных или другого источника данных
-                                $words = explode(" ", $industry); // разбиваем строку на массив слов
-                                echo '<div class="task-div-main scroll-bar">';
-                                    foreach ($words as $word) {
-                                        echo "<p class='task-industry'>" . $word . "</p>";
-                                    }
-                                echo '</div>';
-                                echo "<button class='btn-order'>Откликнуться</button>";
-                            echo "</div>";
-                        echo "</div>";
+                while ($row = $result->fetch_assoc()) {
+                    if ($row['status'] == 'Выполняется') {
+                        continue; // Пропустить объявление, если статус равен "Выполняется"
                     }
-                } else {
-                    echo "<p>Нет доступных заказов.</p>";
+
+                    $counter++;
+
+                    echo "<div class='task-div' data-task-id='" . $row['id'] . "'>";
+                        echo "<div class='task-title-budget'>";
+                            echo "<p class='task-title'>" . $row['title'] . "</p>";
+                            echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
+                        echo "</div>";
+
+                        echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
+
+                        echo "<div class='industry-main-div'>";
+                            $industry = $row['industry']; // получение значения из базы данных или другого источника данных
+                            $words = explode(" ", $industry); // разбиваем строку на массив слов
+                            echo '<div class="task-div-main scroll-bar">';
+                                foreach ($words as $word) {
+                                    echo "<p class='task-industry'>" . $word . "</p>";
+                                }
+                            echo '</div>';
+                            echo "<button class='btn-order'>Откликнуться</button>";
+                        echo "</div>";
+                    echo "</div>";
                 }
 
-                $conn->close();
-            ?>
-        </div>
+                if ($counter == 0) {
+                    echo "<p class='alert-orders'>Нет доступных заказов.</p>";
+                }
+            }
+
+            $conn->close();
+        ?>
     </div>
+</div>
 
         <!-- Регистрация -->
         <div id="div3" style="display: none">
@@ -218,6 +227,55 @@
 
             </form>
         </div>
+
+        <div id="div5" style="display: none">
+            <h1 class="tasks-main-headtext">Объявления с вашим участием</h1>
+                <div class="tasks-main">
+                    <?php
+                        $db = mysqli_connect('127.0.0.1', 'root', '', 'freelance');
+
+                        if (mysqli_connect_errno()) {
+                            die('Ошибка подключения к базе данных: ' . mysqli_connect_error());
+                        }
+
+                        // Получение ID авторизованного пользователя из cookie
+                        $user_id = $_COOKIE['user_id'];
+
+                        $query = "SELECT o.* FROM orders o INNER JOIN users u ON o.id_executor = u.id WHERE u.id = '$user_id'";
+                        $result = mysqli_query($db, $query);
+
+                        // Проверка наличия объявлений с участием пользователя
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                // Вывод объявлений, в которых пользователь участвует
+                                echo "<div class='task-div' data-task-id='" . $row['id'] . "'>";
+                                echo "<div class='task-title-budget'>";
+                                    echo "<p class='task-title'>" . $row['title'] . "</p>";
+                                    echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
+                                echo "</div>";
+
+                                echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
+
+                                echo "<div class='industry-main-div'>";
+                                    $industry = $row['industry']; // получение значения из базы данных или другого источника данных
+                                    $words = explode(" ", $industry); // разбиваем строку на массив слов
+                                    echo '<div class="task-div-main scroll-bar">';
+                                        foreach ($words as $word) {
+                                            echo "<p class='task-industry'>" . $word . "</p>";
+                                        }
+                                    echo '</div>';
+                                    echo "<button class='btn-order'>Отказаться</button>";
+                                echo "</div>";
+                            echo "</div>";
+                            }
+                        } else {
+                            echo 'Нет объявлений с вашим участием.';
+                        }
+
+                        mysqli_close($db);
+                    ?>
+                </div>
+        </div>
     </body>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -230,6 +288,7 @@
     var div2 = document.getElementById("div2");
     var div3 = document.getElementById("div3");
     var div4 = document.getElementById("div4");
+    var div5 = document.getElementById("div5");
 
     var username = "<?php echo $username ?>";
 
@@ -240,6 +299,7 @@
             div2.style.display = "none";
             div3.style.display = "none";
             div4.style.display = "none";
+            div5.style.display = "none";
         });
     }
 
@@ -250,6 +310,7 @@
             div2.style.display = "none";
             div3.style.display = "none";
             div4.style.display = "block";
+            div5.style.display = "none";
         });
     }
 });
@@ -259,8 +320,10 @@
     var div2 = document.getElementById("div2");
     var div3 = document.getElementById("div3");
     var div4 = document.getElementById("div4");
+    var div5 = document.getElementById("div5");
 
     if (div4.style.display === "block") {
+        div5.style.display = "none";
         div3.style.display = "block";
         div4.style.display = "none";
         div2.style.display = "none";
@@ -273,19 +336,44 @@
     var div2 = document.getElementById("div2");
     var div3 = document.getElementById("div3");
     var div4 = document.getElementById("div4");
+    var div5 = document.getElementById("div5");
 
     if (div3.style.display === "block") {
         div3.style.display = "none";
         div2.style.display = "none";
         div1.style.display = "none";
         div4.style.display = "block";
+        div5.style.display = "none";
     }
     }); 
+
+    document.addEventListener("DOMContentLoaded", function() {
+    var userProfile = document.getElementById("userProfile");
+
+    var div1 = document.getElementById("div1");
+    var div2 = document.getElementById("div2");
+    var div3 = document.getElementById("div3");
+    var div4 = document.getElementById("div4");
+    var div5 = document.getElementById("div5");
+
+    // Проверяем, существует ли кнопка "createAdButton" на странице
+    if (userProfile) {
+        userProfile.addEventListener("click", function() {
+            div1.style.display = "none";
+            div2.style.display = "none";
+            div3.style.display = "none";
+            div4.style.display = "none";
+            div5.style.display = "block";
+        });
+    }
+});
+    
 
     $('.btn-order').click(function() {
     var userId = <?php echo isset($_COOKIE['user_id']) ? $_COOKIE['user_id'] : 'null'; ?>;
     var taskId = $(this).closest('.task-div').data('task-id');
     var status = 'Выполняется';
+    alert("Вы установили откликнулись на объявление!"); window.location.href = "index.php";
 
     if (userId === null) {
         alert('Пожалуйста, авторизуйтесь для выполнения запроса');
@@ -297,8 +385,6 @@
         url: 'requestProcessing.php',
         data: {userId: userId, taskId: taskId, status: status},
         success: function(response) {
-            // Обновление таблицы или других элементов на странице
-            // в соответствии с новыми данными
         },
         error: function() {
             alert('Ошибка при выполнении запроса');

@@ -73,6 +73,7 @@ body {
 .header-1-text {
     font-size: 30px;
     font-weight: bold;
+    cursor: default;
 }
 
 .w-10 {
@@ -145,6 +146,7 @@ body {
 .tasks-main-headtext {
     margin: 25px auto 25px auto;
     width: max-content;
+    cursor: default;
 }
 
 .task-div {
@@ -311,6 +313,7 @@ select {
 
 .user-logo {
     width: 36px;
+    cursor: pointer;
 }
 
 .div-user {
@@ -339,4 +342,9 @@ select {
     cursor: pointer;
     width: 64px;
     height: 64px;
+}
+
+.alert-orders {
+    font-size: 20px;
+    cursor: default;
 }
