@@ -94,7 +94,6 @@
     }
 ?>
     </Header>
-
     <!-- Форма для нового объявления -->
     <div id="div1" style="display: none">
         <form class="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -137,7 +136,7 @@
 
             if ($row_check['total'] > 0) {
                 // Выполнить запрос только если есть заказы
-                $sql = "SELECT * FROM orders";
+                $sql = "SELECT * FROM orders ORDER BY id DESC";
                 $result = $conn->query($sql);
                 $counter = 0;
 
@@ -149,24 +148,34 @@
                     $counter++;
 
                     echo "<div class='task-div' data-task-id='" . $row['id'] . "'>";
-                            echo "<div class='task-title-budget'>";
-                                echo "<p class='task-title'>" . $row['title'] . "</p>";
-                                echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
-                            echo "</div>";
+                    echo "<div class='task-title-budget'>";
+                    echo "<p class='task-title'>" . $row['title'] . "</p>";
+                    echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
+                    echo "</div>";
 
-                            echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
+                    echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
 
-                            echo "<div class='industry-main-div'>";
-                            echo '<div class="task-div-main scroll-bar">';
-                                    echo "<p class='task-industry scroll-bar'>" . $row['industry'] . "</p>";
-                            echo '</div>';
-                            if ($user_role == 'Заказчик') {
-                                echo "<button class='btn-order' disabled>Откликнуться</button>";
-                                echo "<p class='alert-message'>Смените вашу роль на Исполнителя для отклика на объявление</p>";
-                            } else {
-                                echo "<button class='btn-order'>Откликнуться</button>";
-                            }
-                        echo "</div>";
+                    // Открываем div для тегов p
+                    echo "<div class='industry-main-div'>";
+                    echo '<div class="task-div-main scroll-bar">';
+                    
+                    // Разделить слова в поле 'industry' и создать отдельный тег <p> для каждого слова
+                    $industries = explode(',', $row['industry']);
+                    foreach ($industries as $industry) {
+                        echo "<p class='task-industry'>" . trim($industry) . "</p>";
+                    }
+
+                    // Закрываем div для тегов p
+                    echo '</div>';
+
+                    if ($user_role == 'Заказчик') {
+                        echo "<button class='btn-order' disabled>Откликнуться</button>";
+                        echo "<p class='alert-message'>Смените вашу роль на Исполнителя для отклика на объявление</p>";
+                    } else {
+                        echo "<button class='btn-order'>Откликнуться</button>";
+                    }
+                    
+                    echo "</div>";
                     echo "</div>";
                 }
 
@@ -198,6 +207,18 @@
 
                 <label for="reg-password">Пароль:</label>
                 <input class="text-field__input" type="password" name="password" id="reg-password" minlength="7" required>
+
+                <br>
+                <br>
+
+                <label for="reg-password-confirm">Подтвердите пароль:</label>
+                <input class="text-field__input" type="password" name="password_confirm" id="reg-password-confirm" required>
+
+                <br>
+                <br>
+
+                <label for="reg-mail">Почта для связи:</label>
+                <input class="text-field__input" type="mail" name="mail" id="reg-mail" required>
 
                 <br>
                 <br>

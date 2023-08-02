@@ -58,7 +58,7 @@ body {
     background-color: rgb(226 232 240);
     border-radius: 10px;
     margin: 6px;
-    padding: 8px;
+    padding: 8px 14px 8px 14px;
     display: flex;
     justify-content: space-between;
     box-shadow: 0 0 20px rgb(226 232 240);
@@ -100,6 +100,10 @@ body {
 
 .header-2-btn:hover {
     scale: 1.05;
+}
+
+.header-2-btn {
+    padding: 16px !important;
 }
 
 .joinRegister:hover {
@@ -184,7 +188,6 @@ body {
     align-self: center;
     height: max-content;
     background-color: rgb(241 245 249);
-    overflow: auto;
     white-space: nowrap;
 }
 
@@ -321,6 +324,7 @@ select {
 
 .div-user {
     display: grid;
+    margin-bottom: 10px;
 }
 
 .div-user img {
@@ -362,7 +366,7 @@ select {
     cursor: pointer;
     position: absolute;
     left: 1250px;
-    top: 100px;
+    top: 95px;
 }
 
 #div1 p {

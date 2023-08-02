@@ -1,5 +1,4 @@
 <?php
-// Подключение к базе данных
 $db = mysqli_connect('127.0.0.1', 'root', '', 'freelance');
 
 // Проверка соединения
@@ -12,6 +11,7 @@ $username = $_POST['username'];
 $login = $_POST['login'];
 $password = $_POST['password'];
 $userRole = $_POST['user_role'];
+$mail = $_POST['mail'];
 
 // Проверка, не существует ли уже пользователь с таким же логином
 $query = "SELECT * FROM users WHERE login = '$login'";
@@ -29,15 +29,36 @@ if (mysqli_num_rows($result) > 0) {
     exit;
 }
 
+// Проверка, не существует ли уже пользователь с такой же почтой
+$query = "SELECT * FROM users WHERE mail = '$mail'";
+$result = mysqli_query($db, $query);
+if (mysqli_num_rows($result) > 0) {
+    echo '<script>alert("Пользователь с такой почтой уже существует"); window.location.href = "index.php";</script>';
+    exit;
+}
+
 // Хэширование пароля
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-// Добавление нового пользователя в базу данных
-$query = "INSERT INTO users (username, login, `password`, user_role) VALUES ('$username', '$login', '$hashedPassword', '$userRole')";
-mysqli_query($db, $query);
+// Получение значения поля для повторного ввода пароля
+$passwordConfirm = $_POST['password_confirm'];
 
-// Закрытие соединения с базой данных
-mysqli_close($db);
+// Проверка, что значения пароля и пароля для подтверждения совпадают
+if ($password !== $passwordConfirm) {
+    echo '<script>alert("Пароли не совпадают"); window.location.href = "register.php";</script>';
+    exit;
+}
 
-echo '<script>alert("Регистрация прошла успешно"); window.location.href = "index.php";</script>';
+// Перед отправкой запроса, подготовим данные
+$stmt = $db->prepare("INSERT INTO users (username, login, password, mail, user_role) VALUES (?, ?, ?, ?, ?)");
+$stmt->bind_param("sssss", $username, $login, $hashedPassword, $mail, $userRole);
+
+// Выполнение подготовленного запроса
+if ($stmt->execute()) {
+    // Закрытие соединения с базой данных
+    mysqli_close($db);
+    echo '<script>alert("Регистрация прошла успешно"); window.location.href = "index.php";</script>';
+} else {
+    echo '<script>window.location.href = "index.php";</script>';
+}
 ?>
