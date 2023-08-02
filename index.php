@@ -133,10 +133,11 @@
             $sql_check = "SELECT COUNT(*) as total FROM orders";
             $result_check = $conn->query($sql_check);
             $row_check = $result_check->fetch_assoc();
+            
 
             if ($row_check['total'] > 0) {
                 // Выполнить запрос только если есть заказы
-                $sql = "SELECT * FROM orders ORDER BY id DESC";
+                $sql = "SELECT *, TIMESTAMPDIFF(MINUTE, dateOfCreation, CURRENT_TIMESTAMP) as minutes_ago FROM orders ORDER BY id DESC";
                 $result = $conn->query($sql);
                 $counter = 0;
 
@@ -151,6 +152,23 @@
                     echo "<div class='task-title-budget'>";
                     echo "<p class='task-title'>" . $row['title'] . "</p>";
                     echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
+                    echo "<p style='display:none'>" . $row['dateOfCreation'] . "</p>";
+
+                    $minutes_ago = $row['minutes_ago'];
+
+                    if ($minutes_ago < 60) {
+                        echo "<p>" . $minutes_ago . " минут назад</p>";
+                    } elseif ($minutes_ago >= 60 && $minutes_ago < 1440) {
+                        $hours_ago = floor($minutes_ago / 60);
+                        echo "<p>" . $hours_ago . " час(а/ов) назад</p>";
+                    } elseif ($minutes_ago >= 1440 && $minutes_ago < 43829.1) { // примерно 30.4 среднее число дней в месяце
+                        $days_ago = floor($minutes_ago / 1440);
+                        echo "<p>" . $days_ago . " дней(дня) назад</p>";
+                    } else {
+                        $months_ago = floor($minutes_ago / (1440 * 30.4));
+                        echo "<p>" . $months_ago . " месяц(а/ев) назад</p>";
+                    }
+
                     echo "</div>";
 
                     echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
