@@ -33,7 +33,7 @@ if (mysqli_num_rows($result) > 0) {
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 // Добавление нового пользователя в базу данных
-$query = "INSERT INTO users (username, login, password, role) VALUES ('$username', '$login', '$hashedPassword', '$userRole')";
+$query = "INSERT INTO users (username, login, `password`, user_role) VALUES ('$username', '$login', '$hashedPassword', '$userRole')";
 mysqli_query($db, $query);
 
 // Закрытие соединения с базой данных

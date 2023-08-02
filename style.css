@@ -212,7 +212,7 @@ body {
 }
 
 
-.btn-order {
+.btn-order, .btn-order2 {
     background-color: rgb(241 245 249) ;
     border: 1px solid black;
     color: rgb(24 24 27);

@@ -51,7 +51,7 @@
                 echo '</div>';
 
                 echo '<form method="post">';
-                echo '<button type="submit" name="clear_cookies" class="btn-exit" title="Выйти из аккаунта"></button>';
+                echo '<button type="submit" name="clear_cookies" class="btn-exit" value="Очистить куки" title="Выйти из аккаунта" onclick="reloadPage()"></button>';
                 echo '</form>';
             }
         ?>
@@ -61,8 +61,11 @@
     if (isset($_POST["clear_cookies"])) {
         $past = time() - 3600; // задаем прошедшее время (1 час назад)
         foreach ($_COOKIE as $cookie_name => $cookie_value) {
+            // Устанавливаем куки с истекшим сроком действия
             setcookie($cookie_name, $cookie_value, $past);
         }
+        // Перезагрузка страницы
+        header("Refresh:0");
     }
 ?>
     </Header>
@@ -264,7 +267,7 @@
                                             echo "<p class='task-industry'>" . $word . "</p>";
                                         }
                                     echo '</div>';
-                                    echo "<button class='btn-order'>Отказаться</button>";
+                                    echo "<button class='btn-order2' data-task-id='" . $row['id'] . "'>Отказаться</button>";
                                 echo "</div>";
                             echo "</div>";
                             }
@@ -373,13 +376,14 @@
     var userId = <?php echo isset($_COOKIE['user_id']) ? $_COOKIE['user_id'] : 'null'; ?>;
     var taskId = $(this).closest('.task-div').data('task-id');
     var status = 'Выполняется';
-    alert("Вы установили откликнулись на объявление!"); window.location.href = "index.php";
 
     if (userId === null) {
         alert('Пожалуйста, авторизуйтесь для выполнения запроса');
         return;
+    } else {
+        alert("Вы откликнулись на объявление!"); window.location.href = "index.php";
     }
-
+    
     $.ajax({
         type: 'POST',
         url: 'requestProcessing.php',
@@ -391,6 +395,33 @@
         }
     });
 });
+
+const buttons = document.querySelectorAll('.btn-order2');
+   
+   // Перебор всех кнопок и установка обработчика событий на каждую кнопку
+   buttons.forEach(button => {
+       button.addEventListener('click', () => {
+           // Получение идентификатора задания из атрибута data-task-id кнопки
+           const taskId = button.dataset.taskId;
+           
+           // Выполнение Ajax-запроса к серверу для обновления базы данных
+           const xhr = new XMLHttpRequest();
+           xhr.onreadystatechange = function() {
+               if (xhr.readyState === 4 && xhr.status === 200) {
+                   // Запрос успешно выполнен, выполните необходимые действия
+                   alert('Вы отказались от задания.'); window.location.href = "index.php";
+               }
+           };
+           
+           // Установка соединения с сервером и отправка запроса
+           xhr.open('POST', 'update_order.php', true);
+           xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+           xhr.send('taskId=' + encodeURIComponent(taskId) + '&executorId=null&status=null');
+       });
+   });
+
+
+   
 </script>
 
 
@@ -421,12 +452,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "
         <script type='text/javascript'>
             alert('Объявление успешно добавлено.');
-            window.location.href = 'index.php';
-        </script>";
-    } else {
-        echo "
-        <script type='text/javascript'>
-            alert('Ошибка: Объявление не было добавлено.');
             window.location.href = 'index.php';
         </script>";
     }
