@@ -284,48 +284,63 @@
 
             </form>
         </div>
-
+        <!-- Объявления на которые отозвался пользователь -->
         <div id="div5" style="display: none">
             <h1 class="tasks-main-headtext">Объявления с вашим участием</h1>
                 <div class="tasks-main">
-                    <?php
-                        $db = mysqli_connect('127.0.0.1', 'root', '', 'freelance');
+                <?php
+                    $db = mysqli_connect('127.0.0.1', 'root', '', 'freelance');
 
-                        if (mysqli_connect_errno()) {
-                            die('Ошибка подключения к базе данных: ' . mysqli_connect_error());
-                        }
+                    if (mysqli_connect_errno()) {
+                        die('Ошибка подключения к базе данных: ' . mysqli_connect_error());
+                    }
 
-                        // Получение ID авторизованного пользователя из cookie
-                        $user_id = $_COOKIE['user_id'];
+                    // Получение ID авторизованного пользователя из cookie
+                    $user_id = $_COOKIE['user_id'];
 
-                        $query = "SELECT o.* FROM orders o INNER JOIN users u ON o.id_executor = u.id WHERE u.id = '$user_id'";
-                        $result = mysqli_query($db, $query);
+                    $query = "
+                        SELECT o.*, u.mail AS customer_mail
+                        FROM orders o 
+                        INNER JOIN users u ON o.id_customer = u.id 
+                        WHERE o.id_executor = '$user_id'
+                    ";
+                    $result = mysqli_query($db, $query);
 
-                        // Проверка наличия объявлений с участием пользователя
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                // Вывод объявлений, в которых пользователь участвует
-                                echo "<div class='task-div' data-task-id='" . $row['id'] . "'>";
-                                echo "<div class='task-title-budget'>";
-                                    echo "<p class='task-title'>" . $row['title'] . "</p>";
-                                    echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
-                                echo "</div>";
-
-                                echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
-
-                                echo "<div class='industry-main-div'>";
-                                    echo '<div class="task-div-main scroll-bar">';
-                                            echo "<p class='task-industry scroll-bar'>" . $row['industry'] . "</p>";
-                                    echo '</div>';
-                                    echo "<button class='btn-order2' data-task-id='" . $row['id'] . "'>Отказаться</button>";
-                                echo "</div>";
+                    // Проверка наличия объявлений с участием пользователя
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            // Вывод объявлений, в которых пользователь участвует
+                            echo "<div class='task-div' data-task-id='" . $row['id'] . "'>";
+                            echo "<div class='task-title-budget'>";
+                                echo "<p class='task-title'>" . $row['title'] . "</p>";
+                                echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
+                                echo "<p class='task-customer-mail'>Mail заказчика: " . $row['customer_mail'] . "</p>";
                             echo "</div>";
-                            }
-                        } else {
-                            echo 'Нет объявлений с вашим участием.';
-                        }
 
-                        mysqli_close($db);
+                            echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
+
+                            // Открываем div для тегов p
+                            echo "<div class='industry-main-div'>";
+                            echo '<div class="task-div-main scroll-bar">';
+                            
+                            // Разделить слова в поле 'industry' и создать отдельный тег <p> для каждого слова
+                            $industries = explode(',', $row['industry']);
+                            foreach ($industries as $industry) {
+                                echo "<p class='task-industry'>" . trim($industry) . "</p>";
+                            }
+
+                            // Закрываем div для тегов p
+                            echo '</div>';
+                                echo "<button class='btn-order2' data-task-id='" . $row['id'] . "'>Отказаться</button>";
+                            echo "</div>";
+                            
+                        echo "</div>";
+                        }
+                    } else {
+                        echo 'Нет объявлений с вашим участием.';
+                    }
+
+                    mysqli_close($db);
                     ?>
                 </div>
         </div>
