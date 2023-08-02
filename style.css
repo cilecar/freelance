@@ -335,7 +335,8 @@ select {
 .div-user p {
     cursor: default;
     text-align: center;
-    width: 100px;
+    width: max-content;
+    margin: auto;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -363,10 +364,8 @@ select {
 .header-3-btn {
     background-color: transparent;
     border: 0;
+    width: 200px;
     cursor: pointer;
-    position: absolute;
-    left: 1250px;
-    top: 95px;
 }
 
 #div1 p {
