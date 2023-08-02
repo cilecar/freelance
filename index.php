@@ -21,53 +21,53 @@
   </div>
 
   <div class="header-2">
-  <?php
-  // Получение значения имени пользователя из куки, если оно установлено
-  $username = isset($_COOKIE['username']) ? $_COOKIE['username'] : '';
+        <?php
+        // Получение значения имени пользователя из куки, если оно установлено
+        $username = isset($_COOKIE['username']) ? $_COOKIE['username'] : '';
 
-  // Получение значения роли пользователя из куки, если оно установлено
-  $user_role = isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : '';
+        // Получение значения роли пользователя из куки, если оно установлено
+        $user_role = isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : '';
 
-  // Проверка, авторизован ли пользователь
-  if (!empty($username)) {
-    // Вывод кнопки "Создать объявление" для пользователя с ролью "Заказчик"
-    if ($user_role == 'Заказчик') {
-      echo '<button id="createAdButton" class="header-2-btn">Создать объявление</button>';
-    }
-    
-    echo '<div class="div-user">';
-    echo '<img src="/img/user-alt-1-svgrepo-com.png" class="user-logo" id="userProfile">';
-    echo '<p>' . $username . '</p>';
-    echo '<p>' . $user_role . '</p>';
-    echo '<button id="toggleRoleButton" class="header-3-btn">Сменить роль на: ' . ($user_role == 'Заказчик' ? 'Исполнитель' : 'Заказчик') . '</button>';
-    echo '</div>';
+        // Проверка, авторизован ли пользователь
+        if (!empty($username)) {
+            // Вывод кнопки "Создать объявление" для пользователя с ролью "Заказчик"
+            if ($user_role == 'Заказчик') {
+            echo '<button id="createAdButton" class="header-2-btn" title="Создать объявление"><img src="/img/plus-large-svgrepo-com.png"></button>';
+            }
+            
+            echo '<div class="div-user">';
+            echo '<img src="/img/user-alt-1-svgrepo-com.png" class="user-logo" id="userProfile">';
+            echo '<p>' . $username . '</p>';
+            echo '<p>' . $user_role . '</p>';
+            echo '<button id="toggleRoleButton" class="header-3-btn">Сменить роль на: ' . ($user_role == 'Заказчик' ? 'Исполнитель' : 'Заказчик') . '</button>';
+            echo '</div>';
 
-    echo '<form method="post">';
-    echo '<button type="submit" name="clear_cookies" class="btn-exit" value="Очистить куки" title="Выйти из аккаунта" onclick="reloadPage()"></button>';
-    echo '</form>';
+            echo '<form method="post">';
+            echo '<button type="submit" name="clear_cookies" class="btn-exit" value="Очистить куки" title="Выйти из аккаунта" onclick="reloadPage()"></button>';
+            echo '</form>';
 
-    echo '<script>
-      document.getElementById("toggleRoleButton").addEventListener("click", function() {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "toggle_role.php", true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4 && xhr.status == 200) {
-            location.reload(); // Перезагрузка страницы после успешного обновления роли пользователя
-          }
+            echo '<script>
+            document.getElementById("toggleRoleButton").addEventListener("click", function() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "toggle_role.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    location.reload(); // Перезагрузка страницы после успешного обновления роли пользователя
+                }
+                }
+                xhr.send();
+            });
+
+            function reloadPage() {
+                location.reload(); // Перезагрузка страницы после выхода из аккаунта
+            }
+            </script>';
+        } else {
+            // Вывод кнопки "Войти" для неавторизованного пользователя
+            echo '<button id="loginButton" class="header-2-btn">Войти</button>';
         }
-        xhr.send();
-      });
-
-      function reloadPage() {
-        location.reload(); // Перезагрузка страницы после выхода из аккаунта
-      }
-    </script>';
-  } else {
-    // Вывод кнопки "Войти" для неавторизованного пользователя
-    echo '<button id="loginButton" class="header-2-btn">Войти</button>';
-  }
-?>
+        ?>
   </div>
 
 <?php

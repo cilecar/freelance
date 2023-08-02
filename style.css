@@ -84,7 +84,6 @@ body {
 .header-2 {
     align-items: center;
     display: flex;
-    gap: 20px;
 }
 
 .header-2-btn, .joinRegister, .register {
@@ -161,7 +160,6 @@ body {
 
 .task-title {
     font-size: 24px;
-    max-width: 75%;
 }
 
 .task-description {
@@ -371,4 +369,21 @@ select {
 #div1 p {
     font-size: 13px;
     color: gray;
+}
+
+#createAdButton {
+    width: 48px;
+    height: 48px;
+    padding: 0 !important;
+    border-radius: 50%;
+}
+
+#createAdButton img {
+    width: 48px;
+}
+
+#createAdButton p {
+    color: black;
+    font-size: 14px;
+    width: 100%;
 }
