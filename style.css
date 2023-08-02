@@ -182,7 +182,9 @@ body {
     display: block;
     align-self: center;
     height: max-content;
-    background-color: rgb(241 245 249) ;
+    background-color: rgb(241 245 249);
+    overflow: auto;
+    white-space: nowrap;
 }
 
 .industry-main-div {

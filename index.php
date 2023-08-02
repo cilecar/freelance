@@ -123,22 +123,18 @@
                     $counter++;
 
                     echo "<div class='task-div' data-task-id='" . $row['id'] . "'>";
-                        echo "<div class='task-title-budget'>";
-                            echo "<p class='task-title'>" . $row['title'] . "</p>";
-                            echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
-                        echo "</div>";
+                            echo "<div class='task-title-budget'>";
+                                echo "<p class='task-title'>" . $row['title'] . "</p>";
+                                echo "<p class='task-budget'>" . $row['budget'] . " руб.</p>";
+                            echo "</div>";
 
-                        echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
+                            echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
 
-                        echo "<div class='industry-main-div'>";
-                            $industry = $row['industry']; // получение значения из базы данных или другого источника данных
-                            $words = explode(" ", $industry); // разбиваем строку на массив слов
+                            echo "<div class='industry-main-div'>";
                             echo '<div class="task-div-main scroll-bar">';
-                                foreach ($words as $word) {
-                                    echo "<p class='task-industry'>" . $word . "</p>";
-                                }
+                                    echo "<p class='task-industry scroll-bar'>" . $row['industry'] . "</p>";
                             echo '</div>';
-                            echo "<button class='btn-order'>Откликнуться</button>";
+                                echo "<button class='btn-order'>Откликнуться</button>";
                         echo "</div>";
                     echo "</div>";
                 }
@@ -260,12 +256,8 @@
                                 echo "<p class='task-description scroll-bar'>" . $row['description'] . "</p>";
 
                                 echo "<div class='industry-main-div'>";
-                                    $industry = $row['industry']; // получение значения из базы данных или другого источника данных
-                                    $words = explode(" ", $industry); // разбиваем строку на массив слов
                                     echo '<div class="task-div-main scroll-bar">';
-                                        foreach ($words as $word) {
-                                            echo "<p class='task-industry'>" . $word . "</p>";
-                                        }
+                                            echo "<p class='task-industry scroll-bar'>" . $row['industry'] . "</p>";
                                     echo '</div>';
                                     echo "<button class='btn-order2' data-task-id='" . $row['id'] . "'>Отказаться</button>";
                                 echo "</div>";
